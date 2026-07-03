@@ -37,11 +37,7 @@ async function addGiftCard(giftCardToAdd) {
 app.post("/addGiftCard",async(req,res)=>{
     try {
         const addedGiftCard = await addGiftCard(req.body)
-        if (addGiftCard) {
             return res.status(201).json({message:"new gift card added successfully",newlyAddedGiftCard:addedGiftCard})
-        } else {
-            return res.status(404).json({error:"added gift card not found"})
-        }
     } catch(err) {
         return res.status(500).json({error:"an error occured while adding new gift card",errorDetails:err.message})
     }
