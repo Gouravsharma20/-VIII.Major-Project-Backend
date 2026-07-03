@@ -69,6 +69,7 @@ app.get("/allgiftCards",async(req,res)=>{
             return res.status(404).json({error:"all gift cards not found"})
         }
     } catch(err) {
+        console.log(err)
         return res.status(500).json({error:"an error occured while gfetting all gift cards",errorDetails:err.message})
     }
 })
