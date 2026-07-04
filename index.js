@@ -70,7 +70,7 @@ app.get("/allgiftCards",async(req,res)=>{
     }
 })
 
-// get product by id
+// get gift card by id
 
 async function getGiftCardById(giftCardId) {
     try {
@@ -100,7 +100,33 @@ app.get("/giftCard/:id",async(req,res)=>{
 })
 
 
-const PORT = 4426
+// get gift card by category
+
+async function GiftCardBy(getBy) {
+    try {
+        const foundGiftCards = await GiftCard.find(getBy)
+        return foundGiftCards
+    } catch(err) {
+        console.log(`an error occured while getting gift cards by ${getBy}`)
+        throw err
+    }
+}
+
+app.get("/category/:categoryType",async(req,res)=>{
+    try {
+        const {categoryType} = req.params
+        const foundCategory = await GiftCardBy({giftCardCategory:categoryType})
+        if (foundCategory.length !==0) {
+            return res.status(200).json({message:"gift card with category found successfully",listOfGiftCards:foundCategory})
+        } else {
+            return res.status(404).json({error:"gift card with category not found"})  
+        }
+    } catch (e) {
+        return res.status(500).json({error:`unable to find caegory`,errorDetail:e.message})
+    } 
+})
+
+const PORT = 4428
 
 app.listen(PORT,()=>{
     console.log(`Server is running on Port ${PORT}`)
