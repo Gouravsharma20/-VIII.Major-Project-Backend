@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
 const giftCardModel = new mongoose.Schema({
+    giftCardImage:{type:String,require:true},
     giftCardNumber:{type:String,required:true},
     giftCardPin:{type:String,required:true},
     redemptionType:{type:String,enum:['Online', 'Offline', 'Both'],required:true},
