@@ -126,7 +126,23 @@ app.get("/category/:categoryType",async(req,res)=>{
     } 
 })
 
-const PORT = 4428
+app.get("/title/:giftCardTitle",async(req,res)=>{
+    try {
+        const title = req.params.giftCardTitle
+        const foundTitle = await GiftCardBy({giftCardTitle:title})
+
+        if (foundTitle.length !==0) {
+            return res.status(200).json({message:"gift card with title found successfully",foundGiftCard:foundTitle})
+        } else {
+            return res.status(404).json({error:`gift card with title ${title} not found`})
+        }
+
+    } catch(err) {
+        return res.status(500).json({error:"unable to find title",errorDetails:err.message})
+    }
+})
+
+const PORT = 4429
 
 app.listen(PORT,()=>{
     console.log(`Server is running on Port ${PORT}`)
