@@ -51,6 +51,7 @@ async function getGiftCard(){
         return allGiftCards
     } catch(err){
         console.log("an error occured while getting gift cards")
+        throw err
     }
 }
 
