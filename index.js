@@ -19,7 +19,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get("/",(req,res)=>{
+app.get("/card/",(req,res)=>{
     res.json("welcome to the gift card express app")
 })
 
@@ -34,7 +34,7 @@ async function addGiftCard(giftCardToAdd) {
 
 // add a new gift card
 
-app.post("/addGiftCard",async(req,res)=>{
+app.post("/card/addGiftCard",async(req,res)=>{
     try {
         const addedGiftCard = await addGiftCard(req.body)
             return res.status(201).json({message:"new gift card added successfully",newlyAddedGiftCard:addedGiftCard})
@@ -57,7 +57,7 @@ async function getGiftCard(){
 
 // list of all gift cards
 
-app.get("/allgiftCards",async(req,res)=>{
+app.get("/card/allgiftCards",async(req,res)=>{
     try {
         const allCards = await getGiftCard()
         if (allCards) {
@@ -86,7 +86,7 @@ async function getGiftCardById(giftCardId) {
     }
 }
 
-app.get("/giftCard/:id",async(req,res)=>{
+app.get("/card/giftCard/:id",async(req,res)=>{
     const id = req.params.id
     try {
         const giftcard = await getGiftCardById(id)
@@ -113,7 +113,7 @@ async function GiftCardBy(getBy) {
     }
 }
 
-app.get("/category/:categoryType",async(req,res)=>{
+app.get("/card/category/:categoryType",async(req,res)=>{
     try {
         const {categoryType} = req.params
         const foundCategory = await GiftCardBy({giftCardCategory:categoryType})
@@ -127,7 +127,7 @@ app.get("/category/:categoryType",async(req,res)=>{
     } 
 })
 
-app.get("/title/:giftCardTitle",async(req,res)=>{
+app.get("/card/title/:giftCardTitle",async(req,res)=>{
     try {
         const title = req.params.giftCardTitle
         const foundTitle = await GiftCardBy({giftCardTitle:title})
@@ -142,6 +142,17 @@ app.get("/title/:giftCardTitle",async(req,res)=>{
         return res.status(500).json({error:"unable to find title",errorDetails:err.message})
     }
 })
+
+app.get("/user/",(req,res)=>{
+    try{
+        return res.json("welcome to user express app")
+    } catch(err) {
+        return res.status(500).json({message:"an error occured while getting user",errorDetails:err.message})
+        throw err
+    }
+})
+
+
 
 const PORT = 4429
 
