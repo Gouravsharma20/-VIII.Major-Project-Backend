@@ -2,6 +2,8 @@ const express = require("express")
 
 const GiftCard = require("./model/GiftCardModel")
 
+const UserSchema = require("./model/UserModel")
+
 const {initializeDatabase} = require("./db/db.connection.js")
 
 const app = express()
@@ -149,6 +151,49 @@ app.get("/user/",(req,res)=>{
     } catch(err) {
         return res.status(500).json({message:"an error occured while getting user",errorDetails:err.message})
         throw err
+    }
+})
+
+app.post("/user/login",async(req,res)=>{
+    try {
+        const {email,password} =  req.body
+
+        if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+        const addedData = await UserSchema.create(req.body)
+        if (addedData){
+            return res.status(201).json({message:"user logged in successfully",loginnedUser:addedData})
+        } else {
+            return res.status(400).json({error:"unable to save data"})
+        }
+
+    } catch(err) {
+        return res.status(500).json({message:"unable to login user",errorDetails:err.message})
+    }
+})
+
+app.post("/user/:id/newAdress",async(req,res)=>{
+    try {
+        const {id} = req.params
+        const {fullName,mobileNumber,pincode,locality,houseNo,flatOrBuilding,landmark,district,state,addressType,isDefault} = req.body
+        if (!fullName || !mobileNumber || !pincode || !locality || !houseNo || !district || !state || !addressType) {
+            return res.status(400).json({error:"all required field are needed"})
+        }
+
+        const newAdress = { fullName, mobileNumber, pincode, locality, houseNo, flatOrBuilding, landmark, district, state, addressType, isDefault }
+
+
+        const addedData = await UserSchema.findByIdAndUpdate(id,{$push:{addresses: newAdress}},{new:true})
+        if (addedData) {
+            return res.status(201).json({message:"new adress added successfully",addedAdress:addedData})
+        } else {
+            return res.status(400).json({error:"unable to add new adress"})
+        }
+
+    } catch(err) {
+        return res.status(500).json({message:"unable to add adress"})
     }
 })
 

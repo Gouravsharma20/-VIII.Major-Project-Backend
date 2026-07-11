@@ -1,3 +1,5 @@
+const mongoose = require("mongoose")
+
 const addressSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     mobileNumber: { type: String, required: true },
@@ -10,13 +12,13 @@ const addressSchema = new mongoose.Schema({
     state: { type: String, required: true },
     addressType: { type: String, enum: ['Home', 'Work', 'Others'], required: true },
     isDefault: { type: Boolean, default: false }
-})
+}, { timestamps: true })
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     addresses: [addressSchema],
 }, { timestamps: true })
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("User", UserSchema)
