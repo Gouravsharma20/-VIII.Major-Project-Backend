@@ -4,6 +4,8 @@ const GiftCard = require("./model/GiftCardModel")
 
 const UserSchema = require("./model/UserModel")
 
+const OrderSchema = require("./model/OrderModel.js")
+
 const {initializeDatabase} = require("./db/db.connection.js")
 
 const app = express()
@@ -174,24 +176,42 @@ app.post("/user/login",async(req,res)=>{
     }
 })
 
-async function createOrder(orders) {
+app.get("/order/",(req,res)=>{
     try {
-        const order = new GiftCard(orders)
-        const savedOrder = await order.save()
-        return savedOrder
-    } catch(err){
-        throw err
-    }
-    
-}
-
-app.post("/user/userOrder",async(req,res)=>{
-    try {
-        const savedOrders = await createOrder(req.body)
-        res.status(201).json({message:"order saved successfully",savedOrder:savedOrders})
+        return res.json("welocme to my orders express app")
 
     } catch(err) {
-        res.status(500).json({err:"Fail to add orders"})
+        throw err
+    }
+})
+
+async function createOrder(orderData) {
+    try {
+        const order = new OrderSchema(orderData);
+        const savedOrder = await order.save();
+        return savedOrder;
+    } catch (err) {
+        throw err;
+    }
+}
+
+app.post("/order/UserOrder",async(req,res)=>{
+    try {
+        const {cart,totalAmount} = req.body
+
+        if (!cart || cart.length === 0) {
+            return res.status(400).json({ err: "Cart is empty" });
+        }
+
+        const savedOrder = await createOrder({items:cart,totalAmount})
+        if (savedOrder) {
+            return res.status(201).json({message:"order saved successfuly",addedorder:savedOrder})
+        } else {
+            return res.status(404).json({error:"saved order not found"})
+        }
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({error:"an error occured while posting orders",})
     }
 })
 
@@ -220,7 +240,7 @@ app.post("/user/:id/newAdress",async(req,res)=>{
 
 
 
-const PORT = 4429
+const PORT = 4426
 
 app.listen(PORT,()=>{
     console.log(`Server is running on Port ${PORT}`)
