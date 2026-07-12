@@ -174,6 +174,27 @@ app.post("/user/login",async(req,res)=>{
     }
 })
 
+async function createOrder(orders) {
+    try {
+        const order = new GiftCard(orders)
+        const savedOrder = await order.save()
+        return savedOrder
+    } catch(err){
+        throw err
+    }
+    
+}
+
+app.post("/user/userOrder",async(req,res)=>{
+    try {
+        const savedOrders = await createOrder(req.body)
+        res.status(201).json({message:"order saved successfully",savedOrder:savedOrders})
+
+    } catch(err) {
+        res.status(500).json({err:"Fail to add orders"})
+    }
+})
+
 app.post("/user/:id/newAdress",async(req,res)=>{
     try {
         const {id} = req.params
