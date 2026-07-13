@@ -11,7 +11,8 @@ const giftCardModel = new mongoose.Schema({
     giftCardexpiryDate:{type:Date,required:true},
     giftCardBalance:{type:Number,required:true},
     redemptionTerms:{type:String,required:true},
-    giftCardCategory:{type:String,enum:['shopping', 'jewellery', 'fashion','electronics','travel','others'],required:true}
+    giftCardCategory:{type:String,enum:['shopping', 'jewellery', 'fashion','electronics','travel','others'],required:true},
+    giftCardRating:{type:Number,require:true}
 },{timestamps:true})
 
 
