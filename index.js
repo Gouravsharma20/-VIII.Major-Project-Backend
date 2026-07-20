@@ -238,75 +238,75 @@ app.post("/user/:id/newAdress",async(req,res)=>{
     }
 })
 
-app.patch("/user/:id/editAdress",async(req,res)=>{
-    try {
-        const {id} = req.params
-        const {
-            addressId,
-            fullName,
-            mobileNumber,
-            pincode,
-            locality,
-            houseNo,
-            flatOrBuilding,
-            landmark,
-            district,
-            state,
-            addressType,
-            isDefault
-        } = req.body;
+// app.patch("/user/:id/editAdress",async(req,res)=>{
+//     try {
+//         const {id} = req.params
+//         const {
+//             addressId,
+//             fullName,
+//             mobileNumber,
+//             pincode,
+//             locality,
+//             houseNo,
+//             flatOrBuilding,
+//             landmark,
+//             district,
+//             state,
+//             addressType,
+//             isDefault
+//         } = req.body;
 
-        if (!addressId) {
-            return res.status(400).json({ error: "addressId is required to edit an address" });
-        }
+//         if (!addressId) {
+//             return res.status(400).json({ error: "addressId is required to edit an address" });
+//         }
 
-        const updateFields = {};
+//         const updateFields = {};
 
-        if (fullName !== undefined) updateFields["addresses.$.fullName"] = fullName;
-        if (mobileNumber !== undefined) updateFields["addresses.$.mobileNumber"] = mobileNumber;
-        if (pincode !== undefined) updateFields["addresses.$.pincode"] = pincode;
-        if (locality !== undefined) updateFields["addresses.$.locality"] = locality;
-        if (houseNo !== undefined) updateFields["addresses.$.houseNo"] = houseNo;
-        if (flatOrBuilding !== undefined) updateFields["addresses.$.flatOrBuilding"] = flatOrBuilding;
-        if (landmark !== undefined) updateFields["addresses.$.landmark"] = landmark;
-        if (district !== undefined) updateFields["addresses.$.district"] = district;
-        if (state !== undefined) updateFields["addresses.$.state"] = state;
-        if (addressType !== undefined) updateFields["addresses.$.addressType"] = addressType;
-        if (isDefault !== undefined) updateFields["addresses.$.isDefault"] = isDefault;
+//         if (fullName !== undefined) updateFields["addresses.$.fullName"] = fullName;
+//         if (mobileNumber !== undefined) updateFields["addresses.$.mobileNumber"] = mobileNumber;
+//         if (pincode !== undefined) updateFields["addresses.$.pincode"] = pincode;
+//         if (locality !== undefined) updateFields["addresses.$.locality"] = locality;
+//         if (houseNo !== undefined) updateFields["addresses.$.houseNo"] = houseNo;
+//         if (flatOrBuilding !== undefined) updateFields["addresses.$.flatOrBuilding"] = flatOrBuilding;
+//         if (landmark !== undefined) updateFields["addresses.$.landmark"] = landmark;
+//         if (district !== undefined) updateFields["addresses.$.district"] = district;
+//         if (state !== undefined) updateFields["addresses.$.state"] = state;
+//         if (addressType !== undefined) updateFields["addresses.$.addressType"] = addressType;
+//         if (isDefault !== undefined) updateFields["addresses.$.isDefault"] = isDefault;
 
-        if (Object.keys(updateFields).length === 0) {
-            return res.status(400).json({ error: "no fields provided to update" });
-        }
+//         if (Object.keys(updateFields).length === 0) {
+//             return res.status(400).json({ error: "no fields provided to update" });
+//         }
 
-        if (isDefault === true) {
-            await UserSchema.updateOne(
-                { _id: id },
-                { $set: { "addresses.$[].isDefault": false } }
-            );
-        }
+//         if (isDefault === true) {
+//             await UserSchema.updateOne(
+//                 { _id: id },
+//                 { $set: { "addresses.$[].isDefault": false } }
+//             );
+//         }
 
-        console.log("User ID:", id);
-        console.log("Address ID:", addressId);
+//         console.log("User ID:", id);
+//         console.log("Address ID:", addressId);
 
-        console.log(user.addresses.map(a => a._id.toString()));
+//         console.log(user.addresses.map(a => a._id.toString()));
 
-         const updatedUser = await UserSchema.findOneAndUpdate(
-            { _id: id, "addresses._id": addressId },
-            { $set: updateFields },
-            { new: true }
-        );
+//          const updatedUser = await UserSchema.findOneAndUpdate(
+//             { _id: id, "addresses._id": addressId },
+//             { $set: updateFields },
+//             { new: true }
+//         );
 
-        if (updatedUser) {
-            return res.status(200).json({ message: "address updated successfully", updatedUser });
-        } else {
-            return res.status(404).json({ error: "address or user not found" });
-        }
+//         if (updatedUser) {
+//             return res.status(200).json({ message: "address updated successfully", updatedUser });
+//         } else {
+//             return res.status(404).json({ error: "address or user not found" });
+//         }
 
 
-    } catch(err){
-        return res.status(500).json({message:"unable to edit adress"})
-    }
-})
+//     } catch(err){
+//         return res.status(500).json({message:"unable to edit adress"})
+//     }
+// })
 
 
 
