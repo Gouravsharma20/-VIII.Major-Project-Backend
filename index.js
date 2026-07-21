@@ -272,17 +272,30 @@ async function deleteUser(userId) {
     }
 }
 
+// delete adress
+
 app.delete("/user/deleteUser/:id",async(req,res)=>{
     try {
         const {id} = req.params
-        const deletingUser = await deleteUser(id)
-        if (deletingUser) {
-            return res.status(200).json({message:"User deleted successfully",User:deletingUser})
+        const { addressId } = req.body
+
+        if (!addressId) {
+            return res.status(400).json({ error: "addressId is required to delete an address" })
+        }
+
+        const updatedUser = await UserSchema.findByIdAndUpdate(
+            id,
+            { $pull: { addresses: { _id: addressId } } },
+            { new: true }
+        )
+
+        if (updatedUser) {
+            return res.status(200).json({message:"User deleted successfully",updatedUser})
         } else {
             return res.status(404).json({message:"user not found"})
         }
     } catch(err) {
-        return res.status(500).json({message:"unable to delete user by id"})
+        return res.status(500).json({message:"unable to delete user"})
     }
 })
 
@@ -332,11 +345,6 @@ app.patch("/user/:id/editAdress",async(req,res)=>{
                 { $set: { "addresses.$[].isDefault": false } }
             );
         }
-
-        // console.log("User ID:", id);
-        // console.log("Address ID:", addressId);
-
-        // console.log(user.addresses.map(a => a._id.toString()));
 
          const updatedUser = await UserSchema.findOneAndUpdate(
             { _id: id, "addresses._id": addressId },
