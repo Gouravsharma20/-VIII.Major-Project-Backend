@@ -234,6 +234,7 @@ app.post("/user/:id/newAdress",async(req,res)=>{
         }
 
     } catch(err) {
+        console.log(err)
         return res.status(500).json({message:"unable to add adress"})
     }
 })
