@@ -238,6 +238,54 @@ app.post("/user/:id/newAdress",async(req,res)=>{
     }
 })
 
+async function getUser(userId){
+    try {
+        const foundUser = await UserSchema.findById(userId)
+        return foundUser
+    } catch(err){
+        console.log("an error occured while find user")
+        throw err
+    }
+}
+
+app.get("/user/:id",async(req,res)=>{
+    try {
+        const {id} = req.params
+        const foundUser = await getUser(id)
+        if(foundUser) {
+            return res.status(200).json({message:"user found successfully",User:foundUser})
+        } else {
+            return res.status(500).json
+        }
+    } catch(err) {
+        return res.status(500).json({message:"unable to get user by id"})
+    }
+})
+
+async function deleteUser(userId) {
+    try {
+        const deletedUser = await UserSchema.findByIdAndDelete(userId)
+        return deletedUser
+    } catch(err) {
+        console.log("an error occured while deleting user")
+        throw err
+    }
+}
+
+app.delete("/user/deleteUser/:id",async(req,res)=>{
+    try {
+        const {id} = req.params
+        const deletingUser = await deleteUser(id)
+        if (deletingUser) {
+            return res.status(200).json({message:"User deleted successfully",User:deletingUser})
+        } else {
+            return res.status(404).json({message:"user not found"})
+        }
+    } catch(err) {
+        return res.status(500).json({message:"unable to delete user by id"})
+    }
+})
+
 app.patch("/user/:id/editAdress",async(req,res)=>{
     try {
         const {id} = req.params
@@ -310,7 +358,7 @@ app.patch("/user/:id/editAdress",async(req,res)=>{
 
 
 
-const PORT = 4427
+const PORT = 4448
 
 app.listen(PORT,()=>{
     console.log(`Server is running on Port ${PORT}`)
