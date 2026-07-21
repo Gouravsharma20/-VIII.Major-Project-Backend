@@ -285,10 +285,10 @@ app.patch("/user/:id/editAdress",async(req,res)=>{
             );
         }
 
-        console.log("User ID:", id);
-        console.log("Address ID:", addressId);
+        // console.log("User ID:", id);
+        // console.log("Address ID:", addressId);
 
-        console.log(user.addresses.map(a => a._id.toString()));
+        // console.log(user.addresses.map(a => a._id.toString()));
 
          const updatedUser = await UserSchema.findOneAndUpdate(
             { _id: id, "addresses._id": addressId },
@@ -310,7 +310,7 @@ app.patch("/user/:id/editAdress",async(req,res)=>{
 
 
 
-const PORT = 4426
+const PORT = 4427
 
 app.listen(PORT,()=>{
     console.log(`Server is running on Port ${PORT}`)
