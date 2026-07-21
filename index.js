@@ -274,7 +274,7 @@ async function deleteUser(userId) {
 
 // delete adress
 
-app.delete("/user/deleteUser/:id",async(req,res)=>{
+app.delete("/user/:id/deleteUser",async(req,res)=>{
     try {
         const {id} = req.params
         const { addressId } = req.body
@@ -290,12 +290,12 @@ app.delete("/user/deleteUser/:id",async(req,res)=>{
         )
 
         if (updatedUser) {
-            return res.status(200).json({message:"User deleted successfully",updatedUser})
+            return res.status(200).json({message:"User adress deleted successfully",updatedUser})
         } else {
             return res.status(404).json({message:"user not found"})
         }
     } catch(err) {
-        return res.status(500).json({message:"unable to delete user"})
+        return res.status(500).json({message:"unable to delete user adress"})
     }
 })
 
